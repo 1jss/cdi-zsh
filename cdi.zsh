@@ -21,14 +21,34 @@ print_folders() {
     folders_list_size=$(( ${#array[@]} ))
 
     if [[ ${#array[@]} -ne 0 ]]; then
-        # Iterate through the array with zero-based indexing
-        for index in {1..$folders_list_size}; do
+        start_index=1
+        end_index=$folders_list_size
+        if [[ $folders_list_size -gt 25 ]]; then
+            start_index=1
+            if [[ $2 -gt 12 ]]; then
+                start_index=$(($2 - 12))
+            fi
+
+            end_index=$((start_index + 24))
+            if [[ $end_index -gt $folders_list_size ]]; then
+                end_index=$folders_list_size
+            fi
+        fi
+
+        if [[ "$start_index" -ne 1 ]]; then
+            echo "  ..."
+        fi
+        # Iterate through the array
+        for index in {$start_index..$end_index}; do
             if [[ "$index" -eq "$2" ]]; then
                 echo -e "\033[1m→ ${array[$index]}\033[0m"
             else
                 echo "  ${array[$index]}"
             fi
         done
+        if [[ "$end_index" -ne "$folders_list_size" ]]; then
+            echo "  ..."
+        fi
     else
         echo -e 'No folders here, press \033[1m←\033[0m to go back'
     fi
