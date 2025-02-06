@@ -95,11 +95,17 @@ init() {
                             ;;
                         D)  # LEFT arrow
                             current_dir=${current_dir%/*}
+                            if [[ $current_dir == "" ]]; then
+                                current_dir="/"
+                            fi
                             current_selection=1
                             ;;
                         C)  # RIGHT arrow (only change if there are subfolders)
                             if [[ "$folders_list_size" -gt 0 ]]; then
                                 get_selected_folder "$current_dir" "$current_selection"
+                                if [[ $current_dir == "/" ]]; then
+                                    current_dir=""
+                                fi
                                 current_dir="$current_dir/$selected_folder"
                                 current_selection=1
                             fi
