@@ -1,7 +1,6 @@
 #!/bin/zsh
 #
-# CDI - Change Dir Interactively
-# Don't waste more time in the terminal browsing folders with CD
+# CDI - Change Dir Interactive
 
 # Change field separator to new-line to easily handle spaces in folder names.
 IFS=$'\n'
@@ -31,7 +30,7 @@ print_folders() {
             fi
         done
     else
-        echo -e 'No folders here, press \033[1m←\033[0m to back'
+        echo -e 'No folders here, press \033[1m←\033[0m to go back'
     fi
 }
 
@@ -98,10 +97,12 @@ init() {
                             current_dir=${current_dir%/*}
                             current_selection=1
                             ;;
-                        C)  # RIGHT arrow
-                            get_selected_folder "$current_dir" "$current_selection"
-                            current_dir="$current_dir/$selected_folder"
-                            current_selection=1
+                        C)  # RIGHT arrow (only change if there are subfolders)
+                            if [[ "$folders_list_size" -gt 0 ]]; then
+                                get_selected_folder "$current_dir" "$current_selection"
+                                current_dir="$current_dir/$selected_folder"
+                                current_selection=1
+                            fi
                             ;;
                     esac
                 fi
